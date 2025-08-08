@@ -1,0 +1,31 @@
+package jdbc;
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+public class DBConnect {
+    public static void main(String[] args) {
+        try {
+            // Load JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish connection
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/Hospital", "root", "12345678"
+            );
+
+            //System.out.println("Connected Successfully");
+            Statement stmt=con.createStatement();
+    		
+    		String sql="CREATE TABLE IF NOT EXISTS Patient1("+"id INT PRIMARY KEY AUTO_INCREMENT,"
+    				+ "name VARCHAR(100),"+"age INT,"+"course VARCHAR(100))";
+    		
+    		stmt.executeUpdate(sql);
+    		System.out.println("Table 'student' created successfully.");
+
+            // Close connection
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Connection Failed: " + e.getMessage());
+        }
+    }
+}

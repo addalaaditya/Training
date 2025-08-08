@@ -1,0 +1,313 @@
+SHOW databases;
+use wipro;
+describe student;
+select * from student;
+
+create database Hospital;
+use Hospital;
+select * from patient;
+
+
+select * from patient1;
+
+
+
+
+
+
+
+
+
+prog1:table creation
+
+package jdbc;
+import java.sql.*;
+/*🏥 Use Case: Hospital Patient Management System
+🎯 Objective:
+To build a backend module in Java that allows hospital staff to add new patients to a MySQL database securely using JDBC and PreparedStatement.
+📘 Scenario:
+A hospital wants to automate its patient registration system. When a new patient arrives, staff members will enter details such as:
+Patient Name
+Age
+Disease
+Admission Date
+Doctor Assigned
+This data should be saved into a patient table in the hospital's database.*/
+
+public class PatientTable {
+    public static void main(String[] args) {
+        try {
+            // Load JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish connection to the MySQL database
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/Hospital", "root", "12345678"
+            );
+
+            // Create a Statement object
+            Statement stmt = con.createStatement();
+
+            // SQL query to create the Patient1 table with a date column
+            String sql = "CREATE TABLE IF NOT EXISTS Patient1 ("
+                       + "NAME VARCHAR(100) PRIMARY KEY, "
+                       + "AGE INT, "
+                       + "DISEASE VARCHAR(100), "
+                       + "ADM_DATE DATE, "
+                       + "DOCTOR_ASSI VARCHAR(100))";
+
+            // Execute the SQL query
+            stmt.executeUpdate(sql);
+            System.out.println("Table 'Patient1' created successfully.");
+
+            // Close the connection
+            con.close();
+        } catch (Exception e) {
+            System.out.println("Connection Failed: " + e.getMessage());
+        }
+    }
+}
+
+prog2:insert data
+
+
+package jdbc;
+
+import java.sql.*;
+
+public class PatientTable {
+    public static void main(String[] args) {
+        try {
+            // Load JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Connect to database
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/Hospital", "root", "12345678");
+
+            // SQL insert statement
+            String sql = "INSERT INTO patient1(NAME, AGE, DISEASE, ADM_DATE, DOCTOR_ASSI) VALUES(?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            // Set values
+            pstmt.setString(1, "Sai");                          // NAME
+            pstmt.setInt(2, 30);                                 // AGE
+            pstmt.setString(3, "Cold");                          // DISEASE
+            pstmt.setDate(4, Date.valueOf("2025-08-02"));        // ADM_DATE (yyyy-MM-dd)
+            pstmt.setString(5, "Dr. Mahesh");                    // DOCTOR_ASSI
+
+            // Execute insert
+            int rowsInserted = pstmt.executeUpdate();
+            if (rowsInserted > 0) {
+                System.out.println("Patient inserted successfully.");
+            }
+
+            // Close connection
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+prog3:insert more values
+
+
+package jdbc;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class PatientTable {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            // Load JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Connect to the database
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/Hospital", "root", "12345678");
+
+            // SQL insert query
+            String sql = "INSERT INTO patient1(NAME, AGE, DISEASE, ADM_DATE, DOCTOR_ASSI) VALUES (?, ?, ?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            // Insert 3 patient records using a loop
+            for (int i = 1; i <= 3; i++) {
+                System.out.println("\nEnter details for patient #" + i);
+
+                System.out.print("Name: ");
+                String name = scanner.nextLine();
+
+                System.out.print("Age: ");
+                int age = scanner.nextInt();
+                scanner.nextLine(); // consume leftover newline
+
+                System.out.print("Disease: ");
+                String disease = scanner.nextLine();
+
+                System.out.print("Admission Date (YYYY-MM-DD): ");
+                String dateStr = scanner.nextLine();
+                Date admissionDate = Date.valueOf(dateStr); // convert to java.sql.Date
+
+                System.out.print("Doctor Assigned: ");
+                String doctor = scanner.nextLine();
+
+                // Set values in PreparedStatement
+                pstmt.setString(1, name);
+                pstmt.setInt(2, age);
+                pstmt.setString(3, disease);
+                pstmt.setDate(4, admissionDate);
+                pstmt.setString(5, doctor);
+
+                // Execute insert
+                int rowsInserted = pstmt.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("✅ Patient inserted successfully.");
+                }
+            }
+
+            // Close connection
+            con.close();
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+  
+
+prog4:update adi as Aditya
+
+package jdbc;
+
+import java.sql.*;
+
+public class UpdatePatientName {
+    public static void main(String[] args) {
+        try {
+            // Load JDBC driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // Establish database connection
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/Hospital", "root", "12345678");
+
+            // SQL update statement
+            String sql = "UPDATE patient1 SET NAME = ? WHERE NAME = ?";
+
+            // Prepare the statement
+            PreparedStatement pstmt = con.prepareStatement(sql);
+            pstmt.setString(1, "Aditya");  // New name
+            pstmt.setString(2, "Adi");     // Old name
+
+            // Execute update
+            int rowsUpdated = pstmt.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("✅ Name updated successfully from Adi to Aditya.");
+            } else {
+                System.out.println("⚠️ No patient found with the name 'Adi'.");
+            }
+
+            // Close connection
+            con.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+code:add or delete
+
+package jdbc;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class PatientTable {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            Connection con = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3306/Hospital", "root", "12345678");
+
+            System.out.println("Choose option:");
+            System.out.println("1. Add patients");
+            System.out.println("2. Delete a patient by name");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); 
+
+            if (choice == 1) {
+                
+                String insertSql = "INSERT INTO patient1(NAME, AGE, DISEASE, ADM_DATE, DOCTOR_ASSI) VALUES (?, ?, ?, ?, ?)";
+                PreparedStatement insertStmt = con.prepareStatement(insertSql);
+
+                System.out.print("How many patients do you want to add? ");
+                int count = scanner.nextInt();
+                scanner.nextLine(); 
+
+                for (int i = 1; i <= count; i++) {
+                    System.out.println("\nEnter details for patient #" + i);
+
+                    System.out.print("Name: ");
+                    String name = scanner.nextLine();
+
+                    System.out.print("Age: ");
+                    int age = scanner.nextInt();
+                    scanner.nextLine();
+
+                    System.out.print("Disease: ");
+                    String disease = scanner.nextLine();
+
+                    System.out.print("Admission Date (YYYY-MM-DD): ");
+                    String dateStr = scanner.nextLine();
+                    Date admissionDate = Date.valueOf(dateStr);
+
+                    System.out.print("Doctor Assigned: ");
+                    String doctor = scanner.nextLine();
+
+                    insertStmt.setString(1, name);
+                    insertStmt.setInt(2, age);
+                    insertStmt.setString(3, disease);
+                    insertStmt.setDate(4, admissionDate);
+                    insertStmt.setString(5, doctor);
+
+                    int rowsInserted = insertStmt.executeUpdate();
+                    if (rowsInserted > 0) {
+                        System.out.println("✅ Patient inserted successfully.");
+                    }
+                }
+            } else if (choice == 2) {
+
+                System.out.print("Enter the name of the patient to delete: ");
+                String nameToDelete = scanner.nextLine();
+
+                String deleteSql = "DELETE FROM patient1 WHERE NAME = ?";
+                PreparedStatement deleteStmt = con.prepareStatement(deleteSql);
+                deleteStmt.setString(1, nameToDelete);
+
+                int rowsDeleted = deleteStmt.executeUpdate();
+                if (rowsDeleted > 0) {
+                    System.out.println("Patient '" + nameToDelete + "' deleted successfully.");
+                } else {
+                    System.out.println("No patient found with the name '" + nameToDelete + "'.");
+                }
+            } else {
+                System.out.println("Invalid choice. Please enter 1 or 2.");
+            }          
+            con.close();
+            scanner.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
+

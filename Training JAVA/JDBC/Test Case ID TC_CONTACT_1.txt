@@ -1,0 +1,37 @@
+Test Case ID: TC_CONTACT_1
+
+Title: Verify contact form with valid inputs 
+
+Module Name: Contact Us Page
+
+Test Designed By: Aditya
+
+Date: 5/8/2025
+
+Pre-Condition:  must be on the Contact Us page of the website.
+
+Test Data:
+		Name: Aditya  
+                Email: aditya@example.com  
+                Mobile No: +91 9999999999  
+                Message: want to buy some products 
+Test Steps:
+
+		1)Navigate to the Contact Us page
+		2)Enter valid Name in the Name field
+		3)Enter valid Email in the Email field
+		4)Select country code and enter valid Mobile No
+		5)Enter a message in the Message box
+		6)Click on the “Submit” button
+
+Expected Result: success  message should appear, and the form should reset.
+
+Actual Result: success  message should appear, and the form should reset.
+
+Status: Pass 
+
+Severity: Medium
+
+Priority: High
+
+Comments: Ensure success message is visible and form clears on submission.
